@@ -206,7 +206,7 @@ class ContentEnricher:
                 item.metadata[f"title_{lang}"] = val.get("text") or str(val) if isinstance(val, dict) else str(val)
 
             parts = []
-            for field in ("whats_new", "why_it_matters", "key_details"):
+            for field in ("whats_new", "why_it_matters", "impact", "key_details"):
                 text = result.get(f"{field}_{lang}", "").strip()
                 if text:
                     parts.append(text)
@@ -220,6 +220,10 @@ class ContentEnricher:
             if result.get(f"community_discussion_{lang}"):
                 val = result[f"community_discussion_{lang}"]
                 item.metadata[f"community_discussion_{lang}"] = val.get("text") or str(val) if isinstance(val, dict) else str(val)
+
+            if result.get(f"impact_{lang}"):
+                val = result[f"impact_{lang}"]
+                item.metadata[f"impact_{lang}"] = val.get("text") or str(val) if isinstance(val, dict) else str(val)
 
         # Store citation sources — only URLs that actually came from our search results
         if result.get("sources") and available_urls:
