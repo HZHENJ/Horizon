@@ -22,6 +22,7 @@ LABELS = {
         "header": "Horizon Daily",
         "source": "Source",
         "background": "Background",
+        "impact": "Impact",
         "discussion": "Discussion",
         "references": "References",
         "tags": "Tags",
@@ -42,6 +43,7 @@ LABELS = {
         "header": "Horizon 每日速递",
         "source": "来源",
         "background": "背景",
+        "impact": "影响",
         "discussion": "社区讨论",
         "references": "参考链接",
         "tags": "标签",
@@ -180,12 +182,18 @@ class DailySummarizer:
             or meta.get("community_discussion")
             or ""
         )
+        impact = (
+            meta.get(f"impact_{language}")
+            or meta.get("impact_en")
+            or ""
+        )
 
         if language == "zh":
             title = _pangu(title)
             summary = _pangu(summary)
             background = _pangu(background)
             discussion = _pangu(discussion)
+            impact = _pangu(impact)
 
         # Source line with parts joined by " · ", link appended at end
         source_type = item.source_type.value
@@ -221,6 +229,10 @@ class DailySummarizer:
             "",
             source_line,
         ]
+
+        if impact:
+            lines.append("")
+            lines.append(f"**{labels['impact']}**: {impact}")
 
         if background:
             lines.append("")
