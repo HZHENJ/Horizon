@@ -117,9 +117,9 @@ Field definitions:
 
 1. **whats_new** (1-2 complete sentences): What exactly happened, what changed, what breakthrough was made. Be specific — mention names, versions, numbers, dates when available.
 
-2. **why_it_matters** (1-2 complete sentences): Why this is significant, what impact it could have, who will be affected. Connect to the broader ecosystem or industry trends.
+2. **why_it_matters** (1-2 complete sentences): Why this is significant — what makes this news important, novel, or worth the reader's attention. Connect to the broader ecosystem or industry trends. Do NOT describe concrete consequences here; leave that to the impact field.
 
-3. **impact** (1-2 complete sentences): The concrete consequences and ripple effects — who or what will be directly affected, what changes in the industry, ecosystem, or daily practice as a result. Be specific about the scale and scope of impact.
+3. **impact** (2-3 complete sentences): The concrete consequences and ripple effects. Cover: (a) short-term direct effects — who benefits or is disrupted immediately; (b) longer-term implications — how this could reshape the industry, ecosystem, or daily practice over time. Be specific about the scale, scope, and who specifically is affected. Do NOT repeat the significance argument from why_it_matters — focus on what actually changes.
 
 4. **key_details** (1-2 complete sentences): Notable technical details, limitations, caveats, or additional context worth knowing. Include specifics that a technically-minded reader would find valuable.
 
@@ -165,8 +165,8 @@ Respond with valid JSON only. Each _en field must be in English; each _zh field 
   "whats_new_zh": "<用中文写1-2句话>",
   "why_it_matters_en": "<1-2 sentences in English>",
   "why_it_matters_zh": "<用中文写1-2句话>",
-  "impact_en": "<1-2 sentences in English>",
-  "impact_zh": "<用中文写1-2句话>",
+  "impact_en": "<2-3 sentences in English>",
+  "impact_zh": "<用中文写2-3句话>",
   "key_details_en": "<1-2 sentences in English>",
   "key_details_zh": "<用中文写1-2句话>",
   "background_en": "<2-4 sentences in English, or empty string>",
