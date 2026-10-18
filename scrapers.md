@@ -24,16 +24,14 @@ Stories and their comments are fetched concurrently. For each story, the top 5 c
 {
   "enabled": true,
   "fetch_top_stories": 30,
-  "min_score": 100,
-  "category": "tech"
+  "min_score": 100
 }
 ```
 
 - `fetch_top_stories` — number of top story IDs to fetch
 - `min_score` — minimum HN points to include a story
-- `category` — optional tag for balanced digest grouping
 
-**Extracted data**: title, URL (falls back to HN discussion URL), author, score, comment count, top comment text, and category.
+**Extracted data**: title, URL (falls back to HN discussion URL), author, score, comment count, and top comment text.
 
 ## GitHub
 
@@ -55,8 +53,7 @@ Two source types are supported:
 {
   "type": "user_events",
   "username": "torvalds",
-  "enabled": true,
-  "category": "oss"
+  "enabled": true
 }
 ```
 
@@ -65,12 +62,9 @@ Two source types are supported:
   "type": "repo_releases",
   "owner": "golang",
   "repo": "go",
-  "enabled": true,
-  "category": "oss"
+  "enabled": true
 }
 ```
-
-- `category` — optional tag for balanced digest grouping; set per source entry
 
 **Authentication**: Set `GITHUB_TOKEN` in your environment for higher rate limits (5000 req/hr vs 60 without).
 
@@ -87,15 +81,13 @@ Fetches any Atom/RSS feed using the `feedparser` library. Tries multiple date fi
   "name": "Simon Willison",
   "url": "https://simonwillison.net/atom/everything/",
   "enabled": true,
-  "category": "ai-tools",
-  "content_extractor": "trafilatura"
+  "category": "ai-tools"
 }
 ```
 
 - `category` — optional tag for grouping (e.g., `"programming"`, `"microblog"`)
-- `content_extractor` — optional name of an extractor defined in `extractors` config; when set, the full article text replaces the feed-provided excerpt (see [Extractors](extractors.md))
 
-**Extracted data**: title, URL, author, content (from `summary`/`description`/`content` fields, or full article text if an extractor is configured), feed name, category, and entry tags.
+**Extracted data**: title, URL, author, content (from `summary`/`description`/`content` fields), feed name, category, and entry tags.
 
 ## Reddit
 
@@ -123,16 +115,14 @@ Subreddits and users are fetched concurrently. Comments are sorted by score, lim
       "subreddit": "MachineLearning",
       "sort": "hot",
       "fetch_limit": 25,
-      "min_score": 10,
-      "category": "ai-ml"
+      "min_score": 10
     }
   ],
   "users": [
     {
       "username": "spez",
       "sort": "new",
-      "fetch_limit": 10,
-      "category": "social"
+      "fetch_limit": 10
     }
   ]
 }
@@ -141,11 +131,10 @@ Subreddits and users are fetched concurrently. Comments are sorted by score, lim
 - `sort` — `hot`, `new`, `top`, or `rising` (subreddits); `hot` or `new` (users)
 - `time_filter` — for `top`/`rising` sorts: `hour`, `day`, `week`, `month`, `year`, `all`
 - `min_score` — minimum post score (subreddits only)
-- `category` — optional tag for balanced digest grouping; set per subreddit or per user entry
 
 **Rate limiting**: Detects HTTP 429 responses on JSON requests, reads the `Retry-After` header, waits, and retries once. Uses browser-like request headers for no-key public access.
 
-**Extracted data**: title, URL, author, score, upvote ratio, comment count, subreddit, flair, self-text, top comments, and category.
+**Extracted data**: title, URL, author, score, upvote ratio, comment count, subreddit, flair, self-text, and top comments.
 
 ## OpenBB
 
@@ -201,17 +190,12 @@ Flow:
 2. Poll `/v2/actor-runs/{run_id}` until status is `SUCCEEDED` or a terminal failure
 3. GET `/v2/datasets/{dataset_id}/items` to retrieve results
 
-Profile timelines use `source_mode: "profiles"`. Keyword discovery and reply expansion reuse `source_mode: "search"` with `search_query`.
-
-When users are configured, a single profile run fetches their timelines together. Each non-empty keyword query starts a separate search run, independently of the configured users. Either path can be used on its own. Results are filtered to the current time window and merged with deduplication by tweet ID across all runs.
-
 **Config** (`sources.twitter`):
 
 ```json
 {
   "enabled": true,
   "users": ["karpathy", "ylecun"],
-  "keywords": ["LLM", "open source"],
   "fetch_limit": 10,
   "fetch_reply_text": false,
   "max_replies_per_tweet": 3,
@@ -223,9 +207,7 @@ When users are configured, a single profile run fetches their timelines together
 ```
 
 - `users` — Twitter screen names to monitor, without the `@` prefix
-- `keywords` — independent Apify search queries (`source_mode: "search"`), not filters on the configured users' timelines. Not supported in Playwright mode.
-- `fetch_limit` — in Apify mode, each profile or keyword-search actor run requests up to `max(100, fetch_limit)` tweets. This is not a combined limit: the example above starts three discovery runs with a limit of 100 tweets each, before time filtering and deduplication. Each keyword adds an actor run and associated Apify usage.
-- `category` — optional tag for balanced digest grouping (applies to all tweets from this source)
+- `fetch_limit` — maximum tweets to fetch per run
 - `fetch_reply_text` — when `true`, a second Apify run fetches reply bodies for each important tweet and appends them under `--- Top Comments ---` for AI analysis
 - `max_replies_per_tweet` — maximum reply lines per tweet (sorted by engagement score)
 - `max_tweets_to_expand` — cap on reply expansion runs per pipeline cycle, to control Apify credit usage
@@ -235,4 +217,4 @@ When users are configured, a single profile run fetches their timelines together
 
 **Authentication**: Set `APIFY_TOKEN` in your `.env`. Get a token at [console.apify.com](https://console.apify.com/account/integrations).
 
-**Extracted data**: tweet text, URL, author, publish time, likes, retweets, replies, views, category, and (optionally) reply-thread text appended under `--- Top Comments ---`.
+**Extracted data**: tweet text, URL, author, publish time, likes, retweets, replies, views, and (optionally) reply-thread text appended under `--- Top Comments ---`.

@@ -81,8 +81,6 @@ uv run playwright install chromium
 }
 ```
 
-Keyword search (`sources.twitter.keywords`) is Apify-only. Playwright logs a warning and skips those queries.
-
 ---
 
 ## 4. 多账号轮询（防封策略）
